@@ -54,6 +54,9 @@ lista2=[] #elementos que hay en cada parcela
 def clima (lista1,lista2):
     crece=0
     lluvia=0
+  if ((lista1[4]>=a)and (lista1[4]<=b)):
+    crece=0
+  elif
     if lista2[1]==1 :
         if (((lista1[1]>=17)and(lista1[1]<=25)) and ((lista1[2]<=112)and(lista1[2]>=34)) and (lista1[3]<=30)):
             crece=3
