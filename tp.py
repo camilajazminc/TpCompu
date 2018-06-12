@@ -1,7 +1,7 @@
 #El cultivo 1 son las frutas finas, 2 el aloe vera y 3 los hongos
 #EL orden de la lista 1 es= temperatura, lluvia, viento, desastre natural
-#crece va a tener como valores 0 cuando no crece, 1 cuando crece el mínimo, 2 cuando tiene crecimiento medio y 3 para el crecimiento máximo
-#En la lista2 tenemos en la posición 1 el tipo de cultivo, 2 el estado del cultivo, 3 la cantidad de lluvia del cultivo, 4 el crecimiento del cultivo, 5 turnos sin crecer
+#rendimiento va a tener como valores 1 cuando es mínimo, 2 cuando es medio y 3 para el máximo
+#En la lista2 tenemos en la posición 0 el tipo de cultivo, 1 el estado del cultivo, 2 la cantidad de lluvia del cultivo, 3 el crecimiento del cultivo, 4 turnos sin crecer
 
 #PANTALLA
 
@@ -53,53 +53,88 @@ lista2=[] #elementos que hay en cada parcela
 
 def clima (lista1,lista2):
     crece=0
+    nocrece=0
     lluvia=0
-  if ((lista1[4]>=a)and (lista1[4]<=b)):
+  if ((lista1[3]>=a)and (lista1[3]<=b)): #CATASTROFENATURAL
     crece=0
-  elif
-    if lista2[1]==1 :
-        if (((lista1[1]>=17)and(lista1[1]<=25)) and ((lista1[2]<=112)and(lista1[2]>=34)) and (lista1[3]<=30)):
-            crece=3
-            lluvia+=lista1[2]
-        elif  (((lista1[1]>=12)and(lista1[1]<=16)) and ((lista1[2]<=112)and(lista1[2]>=34)) and (lista1[3]<=30)):
-            crece=2
-            lluvia+=lista1[2]
-        elif  (((lista1[1]>=9)and(lista1[1]<=11)) and ((lista1[2]<=112)and(lista1[2]>=34)) and (lista1[3]<=30)):
-            crece=1
-            lluvia+=lista1[2]
+  else:
+    if lista2[0]==1 : 
+        if (((lista1[0]>=9)and(lista1[0]<=25)) and ((lista1[1]<=112)and(lista1[1]>=34)) and (lista1[2]<=30)):
+            crece+=1
+            lluvia+=lista1[1]
         else:
-            crece = 0
-            lluvia+=lista1[2]
-    elif lista2[1]==2 :
-        if (((lista1[1]>=10)and(lista1[1]<=40)) and (lista1[3]<=100)):
-            crece=3
-            lluvia+=lista1[2]
-        elif (((lista1[1]>=1)and(lista1[1]<=10)) and (lista1[3]<=100)):
-            crece=2
-            lluvia+=lista1[2]
-        elif ((lista1[1]<=1) and (lista1[3]<=100)):
-            crece=1
-            lluvia+=lista1[2]
+            nocrece += 1
+            
+    elif lista2[0]==2 :
+        if (((lista1[0]>=1)and(lista1[0]<=40)) and (lista1[2]<=100)):
+            crece+=1
+            lluvia+=lista1[1]
         else:
-            crece=0
-            lluvia+=lista1[2]
-    elif lista2[1]==3:
-        if (((lista1[1]>=16)and(lista1[1]<=30)) and ((lista1[2]<=200)and(lista1[2]>=34)) and (lista1[3]<=80)):
-            crece=3
-            lluvia+=lista1[2]
-        elif  (((lista1[1]>=12)and(lista1[1]<=15)) and ((lista1[2]<=200)and(lista1[2]>=34)) and (lista1[3]<=80)):
-            crece=2
-            lluvia+=lista1[2]
-        elif  (((lista1[1]>=6)and(lista1[1]<=11)) and ((lista1[2]<=200)and(lista1[2]>=34)) and (lista1[3]<=80)):
-            crece=1
-            lluvia+=lista1[2]
+            nocrece+=1
+            
+    elif lista2[0]==3:
+        if (((lista1[0]>=6)and(lista1[0]<=30)) and ((lista1[1]<=200)and(lista1[1]>=34)) and (lista1[2]<=80)):
+            crece+=1
+            lluvia+=lista1[1]
         else:
-            crece = 0
-            lluvia+=lista1[2]
-    
-    lista3=[crece,lluvia]
+            nocrece += 1
+                
+    lista3=[crece, nocrece, lluvia]
             
     return (lista3)
+
+lista4=clima(lista1,lista2)
+
+def cosecha (lista2,lista4):
+   cosechar=0
+   rendimiento=0
+   muere=0
+   if lista2[0]==1 : 
+        if lista4[1]<=2:
+            if lista4[0]==9: #cosecho
+               cosechar=1
+               if (lista4[2]>=300 and lista4[2]<=600):
+                   rendimiento=1
+               elif (lista4[2]>600 and lista4[2]<=800):
+                   rendimiento=2
+               elif (lista4[2]>800 and lista4[2]<=1000):
+                   rendimiento=3
+            elif lista4[0]<9:
+                rendimiento=0
+        else:
+            muere=1
+    
+    if lista2[0]==2 : 
+        if lista4[1]<=2:
+            if lista4[0]==1: #cosecho
+               cosechar=1
+               if lista4[2]<=100:
+                   rendimiento=1
+               elif (lista4[2]>100 and lista4[2]<=300):
+                   rendimiento=2
+               elif lista4[2]>300 :
+                   rendimiento=3
+            elif lista4[0]<1:
+                rendimiento=0
+        else:
+            muere=1
+   
+   if lista2[0]==3 : 
+        if lista4[1]<=2:
+            if lista4[0]==5: #cosecho
+               cosechar=1
+               if (lista4[2]>=100 and lista4[2]<=400):
+                   rendimiento=1
+               elif (lista4[2]>400 and lista4[2]<=500):
+                   rendimiento=2
+               elif (lista4[2]>500 and lista4[2]<=600):
+                   rendimiento=3
+            elif lista4[0]<5:
+                rendimiento=0
+        else:
+            muere=1
+    lista5=[rendimiento, muere]
+    return(lista5)
             
             
 main()           
