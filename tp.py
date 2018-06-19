@@ -9,11 +9,14 @@
 #eventype para el mouse.nap devuelve el click
 
 import sys, pygame
-from pygame.locals import* 
+from pygame.locals import*
+pygame.init()
 
 WIDTH=600
 HEIGHT=400
 Color=(25, 255, 100)
+
+#posx,posy=pygame.mouse.get_pos()
 
 def main():
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -26,7 +29,6 @@ def main():
     pygame.draw.line(screen, (0,0,0),(100,250),(400,250),5)
     pygame.draw.line(screen, (0,0,0),(100,325),(400,325),5)
     pygame.draw.line(screen, (0,0,0),(100,400),(400,400),5)
-
     
     #verticales
     pygame.draw.line(screen, (0,0,0),(100,100),(100,400),5)
@@ -35,12 +37,19 @@ def main():
     pygame.draw.line(screen, (0,0,0),(325,100),(325,400),5)
     pygame.draw.line(screen, (0,0,0),(400,100),(400,400),5)
     
+    
+    mifuente=pygame.font.sysfont("Arial",10)
+    MiTexto1=MiFuente.render("Furtas Finas",0,(200,60,88))
+    MiTexto2=MiFuente.render("Aloe Vera",0,(200,60,88))
+    MiTexto3=MiFuente.render("Hongos",0,(200,60,88))
     #botones seleccion de cultivos
     
     pygame.draw.rect(screen, (100,100,100), (500, 50, 50, 50), 0)
+    sreen.blit(MiTexto1,(500, 50, 50, 50))
     pygame.draw.rect(screen, (100,100,100), (500, 150, 50, 50), 0)
+    sreen.blit(MiTexto2,(500, 150, 50, 50))
     pygame.draw.rect(screen, (100,100,100), (500, 250, 50, 50), 0)
-    
+    sreen.blit(MiTexto3,(500, 250, 50, 50))
     pygame.display.flip()
     
     
@@ -48,6 +57,8 @@ def main():
         for eventos in pygame.event.get():   
             if eventos.type == QUIT: 
                 sys.exit(0)    
+
+
 
 def funciondevuelveclima(turno):
     
@@ -114,7 +125,6 @@ def funciondevuelveclima(turno):
             catn=0
     
     lista1=[temp,lluv,vien,catn]
-    print(lista1)
     return(lista1)
 
 funciondevuelveclima(2)                
@@ -122,6 +132,7 @@ funciondevuelveclima(2)
                 
 lista1=[] #random con los datos del archivo de clima
 lista2=[] #elementos que hay en cada parcela
+    
 
 def clima (lista1,lista2):
     crece=0
@@ -210,6 +221,7 @@ def cosecha (lista4):
         else:
             muere=1
         lista5=[rendimiento, muere]
+       
         return(lista5)
 
 
@@ -278,15 +290,14 @@ listab=[tipodecultivo, estado, cantidaddelluvia, crecimiento, nocrecimiento] #el
 listaparcelas=[]
 for i in range (1,17):
     listaparcelas.append(listab)#lista4
-random=[1,500,30,4] #random con los datos del archivo de clima (lista1)
-
-funcionclima=clima(random,listaparcelas) 
+random=funciondevuelveclima(i) #random con los datos del archivo de clima (lista1)
+funcionclima=clima(random,listaparcelas)
 funcioncosecha=cosecha(listaparcelas) #lista6
-
-
 #falta plantar (listas de parcelas[j-1]=listab)
 
+
 for i in range (1,25):
+
     monedasturno=0
     for j in range (1,17):
         #apuesta
@@ -295,8 +306,10 @@ for i in range (1,25):
         funcionclima=clima(random,listaparcelas[j-1])
         funcioncosecha=cosecha(listaparcelas[j-1])
         
+        print(listaparcelas)
+        
         #reemplazo valores en la lista de cada parcela
-        if (funcioncosecha[1]==1 or funcioncosecha[0]!=0):
+        if ((funcioncosecha[1]==1) or (funcioncosecha[0]!=0)):
             listaparcelas[j-1]=listab
         
         else:
@@ -310,8 +323,6 @@ for i in range (1,25):
             
             
 main()           
-            
-            
             
 
             
