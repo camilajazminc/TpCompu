@@ -1,6 +1,26 @@
 import sys, pygame
 from pygame.locals import* 
 
+#CONSTANTES PARA NO METER NUMEROS MAGICOS
+
+#cultivos
+estadoMuerto = 0
+estadoCreciendo = 1
+sinCultivo = 0
+frutasFinas = 1
+aloeVera = 2
+hongos = 3
+#posiciones de las parcelas
+tipodecultivo   = 0
+estado=1
+crecimientoDelCultivo = 3
+cantidadDeLluvia = 2
+turnosSinCrecer = 4
+
+turnosMaximosSinCrecer = 2
+lluviaMaximaFrutasFinas = 1000
+lluviaMaximoHongos = 600
+
 def funciondevuelveclima(turno):
     
     filepath = 'ejemplo.txt'  
@@ -12,6 +32,7 @@ def funciondevuelveclima(turno):
             list.append(line.rstrip().lstrip().split(','))
         
     # IMPRIMIR LOS RANGOS DE Cada variable para los proximos 3 turnos
+    
     if (turno<21):
         for u in range (turno,turno+3):
             print("turno",u,"\n rango de temp:",list[u-1][0],"rango lluv",list[u-1][1],"rango vient",list[u-1][2],"rango catn",list[u-1][3])
@@ -74,82 +95,66 @@ def funciondevuelveclima(turno):
     lista1=[temp,lluv,vien,catn]
     return(lista1)
 
-def clima (lista1,lista2):
-    crece=0
-    nocrece=0
-    lluvia=0
+def clima (random,parcela):
+    print(random,"EL CLIMA QUE LE ENTRA a la funcion clima")
+    
     muerte=0
-    if lista1[3]==1:
+    if random[3]==1: #CATASTROFE NATURAL
         muerte=1
     else:
-        if lista2[0]==1: 
-         if (((lista1[0]>=9)and(lista1[0]<=25)) and ((lista1[1]<=112)and(lista1[1]>=34)) and (lista1[2]<=30)):
-            crece=1
-            lluvia+=lista1[1]
+        if parcela[0]==1: 
+         if (((random[0]>=9)and(random[0]<=25)) and ((random[1]<=112)and(random[1]>=34)) and (random[2]<=30)):
+            parcela[crecimientoDelCultivo]+=1
+            parcela[cantidadDeLluvia]+=random[1]
          else:
-            nocrece = 1
+            parcela[turnosSinCrecer]+= 1
             
-        elif lista2[0]==2 :
-         if (((lista1[0]>=1)and(lista1[0]<=40)) and (lista1[2]<=100)):
-            crece=1
-            lluvia+=lista1[1]
+        elif parcela[0]==2 :
+         if (((random[0]>=1)and(random[0]<=40)) and (random[2]<=100)):
+            parcela[crecimientoDelCultivo]+=1
+            parcela[cantidadDeLluvia]+=random[1]
          else:
-            nocrece=1
+            parcela[turnosSinCrecer]+=1
             
-        elif lista2[0]==3:
-         if (((lista1[0]>=6)and(lista1[0]<=30)) and ((lista1[1]<=200)and(lista1[1]>=34)) and (lista1[2]<=80)):
-            crece=1
-            lluvia=lista1[1]
+        elif parcela[0]==3:
+         if (((random[0]>=6)and(random[0]<=30)) and ((random[1]<=200)and(random[1]>=34)) and (random[2]<=80)):
+            parcela[crecimientoDelCultivo]+=1
+            parcela[cantidadDeLluvia]+=random[1]
          else:
-            nocrece = 1
-            
-    return [crece, nocrece, lluvia,muerte]
+            parcela[turnosSinCrecer]+= 1
+    
+    return ([parcela,muerte])
 
-#cultivos
-estadoMuerto = 0
-estadoCreciendo = 1
-sinCultivo = 0
-frutasFinas = 1
-aloeVera = 2
-hongos = 3
-#posiciones de las parcelas
-tipodecultivo   = 0
-crecimientoDelCultivo = 3
-cantidadDeLluevia = 2
-turnosSinCrecer = 4
 
-turnosMaximosSinCrecer = 2
-lluviaMaximaFrutasFinas = 1000
-lluviaMaximoHongos = 600
-def cosecha (parcela):
+def cosecha (parcela): #PORQUE EVALUAMOS SI MUERE EN LA FUNCION COSECHA Y EN LA FUNCION CLIMA FIJARSE QUE ONDA
    rendimiento=0
    muere = 0
    if parcela[tipodecultivo] == frutasFinas: 
-        if parcela[tipodecultivo] <= turnosMaximosSinCrecer:
-          if parcela[cantidadDeLluevia] > lluviaMaximaFrutasFinas:
+      if parcela[tipodecultivo] <= turnosMaximosSinCrecer:
+          if parcela[cantidadDeLluvia] > lluviaMaximaFrutasFinas:
             muere=1
-          elif parcela[3]==9: #cosecho
+          elif parcela[crecimientoDelCultivo]==9: #cosecho
                
-               if (parcela[cantidadDeLluevia] >= 300 and parcela[cantidadDeLluevia] <= 600):
+               if (parcela[cantidadDeLluvia] >= 300 and parcela[cantidadDeLluvia] <= 600): #CALCULOS DE RENDIMIENTO SEGUN LA LLUVIA PARA FRUTA FINA
                    rendimiento=1
-               elif (parcela[cantidadDeLluevia] > 600 and parcela[cantidadDeLluevia] <= 800):
+               elif (parcela[cantidadDeLluvia] > 600 and parcela[cantidadDeLluvia] <= 800):
                    rendimiento=2
-               elif (parcela[cantidadDeLluevia] > 800 and parcela[cantidadDeLluevia] <= 1000):
+               elif (parcela[cantidadDeLluvia] > 800 and parcela[cantidadDeLluvia] <= 1000):
                    rendimiento=3
-          elif parcela[crecimientoDelCultivo] < 9:
+          elif parcela[crecimientoDelCultivo] < 9: #NO COSECHO TODAVIA
                 rendimiento=0
-        else:
+      else:
           muere=1
     
    if parcela[tipodecultivo] == aloeVera:
         if parcela[tipodecultivo] <= turnosMaximosSinCrecer:
-            if parcela[3]==1: #cosecho
+            if parcela[crecimientoDelCultivo]==1: #cosecho
  
-               if parcela[cantidadDeLluevia] <= 100:
+              if parcela[cantidadDeLluvia] <= 100:
                    rendimiento=1
-               elif (parcela[cantidadDeLluevia] > 100 and parcela[cantidadDeLluevia] <= 300):
+              elif (parcela[cantidadDeLluvia] > 100 and parcela[cantidadDeLluvia] <= 300):
                    rendimiento=2
-               elif parcela[cantidadDeLluevia] > 300 :
+              elif parcela[cantidadDeLluevia] > 300 :
                    rendimiento=3
             elif parcela[crecimientoDelCultivo] < 1:
                 rendimiento=0
@@ -157,10 +162,10 @@ def cosecha (parcela):
             muere=1
    
    if parcela[tipodecultivo] == hongos : 
-        if parcela[tipodecultivo] <= turnosMaximosSinCrecer:
-            if parcela[cantidadDeLluevia] > lluviaMaximoHongos:
+      if parcela[tipodecultivo] <= turnosMaximosSinCrecer:
+           if parcela[cantidadDeLluvia] > lluviaMaximoHongos:
                    muerte=1
-            elif parcela[3]==5: #cosecho
+           elif parcela[crecimientoDelCultivo]==5: #cosecho
                
                if (parcela[2]>=100 and parcela[2]<=400):
                    rendimiento=1
@@ -168,37 +173,39 @@ def cosecha (parcela):
                    rendimiento=2
                elif (parcela[2]>500 and parcela[2]<=600):
                    rendimiento=3
-            elif parcela[crecimientoDelCultivo] < 5:
+           elif parcela[crecimientoDelCultivo] <5:
                 rendimiento=0
-        else:
+      else:
             muere=1
-   return [rendimiento, muere]
+   
+   return([rendimiento, muere])
 
 
 #Valor del cultivo + (valor del cultivo*rendimiento/100)
-def ganancia (parcela, funcioncosecha):
+def ganancia (cultivo, rendimiento):
     monedas=0
-    if parcela[0]==1 :
-        if funcioncosecha[0]==1:
+    if (cultivo==1): #si el cultivo en la parcela es fruta fina
+        if rendimiento==1: #y el rendimiento fue de 1 2 o 3
             monedas=10+(10*50/100)
-        elif funcioncosecha[0]==2:
+        elif rendimiento==2:
             monedas=10+(10*80/100)    
-        elif funcioncosecha[0]==3:
+        elif rendimiento==3:
             monedas=10+(10*100/100)
-    elif parcela[0]==2 :
-        if funcioncosecha[0]==1:
+    elif (cultivo==2): #si el cultivo en la parcela es aloe vera
+        if rendimiento==1:#y el rendimiento fue de 1 2 o 3
             monedas=1+(1*50/100)
-        elif funcioncosecha[0]==2:
+        elif rendimiento==2:
             monedas=1+(1*80/100)    
-        elif funcioncosecha[0]==3:
+        elif rendimiento==3:
             monedas=1+(1*100/100)
-    elif parcela[0]==3 :
-        if funcioncosecha[0]==1:
+    elif (cultivo==3): #si el cultivo en la parcela es fruta fina
+        if rendimiento==1:#y el rendimiento fue de 1 2 o 3
             monedas=5+(5*50/100)
-        elif funcioncosecha[0]==2:
+        elif rendimiento==2:
             monedas=5+(5*80/100)    
-        elif funcioncosecha[0]==3:
+        elif rendimiento==3:
             monedas=5+(5*100/100)
+    print("DENTRO DE LA FUNCION GANANCIA ESTA SON LAS MONEDAS SI COSECHO",monedas)
     return(monedas)
 
 #apuesta
@@ -207,8 +214,8 @@ def apuesta (monedastotal,parcela):
     
     if (monedastotal>0):   
        if parcela[1]==0:
-           print("Despues del if",parcela)
-           print("Quiere plantar en la parcerla " , i, "? responda 1 para plantar o 2 para pasar a la siguiente parcela")
+           print("como entra la parcela a la funcion apuesta",parcela)
+           print("Quiere plantar en la parcerla? responda 1 para plantar o 2 para pasar a la siguiente parcela")
            respuesta=int(input())
            if (respuesta ==1):
             if (monedastotal>=10):
@@ -237,17 +244,20 @@ def apuesta (monedastotal,parcela):
                parcela[0]==2
                monedastotal-=1
                parcela[1]=1
-    else:
-        print ("encontre vacia")
+       else:
+        print ("encontre llena")
     lista1=[monedastotal,parcela]
+    print("lo que devuelve APUESTA",lista1)
     return (lista1)
   
+    
+#acá empieza el programa principal
 
 #El cultivo 0 sin cultivo, 1 son las frutas finas, 2 el aloe vera y 3 los hongos
 #EL orden de la lista 1 es= temperatura, lluvia, viento, desastre natural
-#Los tipos de estado son: 0 muerto, vacio o cosechado y 1 creciendo.
-#rendimiento va a tener como valores 1 cuando es minimo, 2 cuando es medio y 3 para el maximo
-#En la listab tenemos en la posicion 0 el tipo de cultivo, 1 el estado del cultivo, 2 la cantidad de lluvia del cultivo, 3 el crecimiento del cultivo, 4 turnos sin crecer
+#Los tipos de estado son: 0 muerto, vacío o cosechado y 1 creciendo.
+#rendimiento va a tener como valores 1 cuando es mínimo, 2 cuando es medio y 3 para el máximo
+#En la listab tenemos en la posición 0 el tipo de cultivo, 1 el estado del cultivo, 2 la cantidad de lluvia del cultivo, 3 el crecimiento del cultivo, 4 turnos sin crecer
 
 tipodecultivo=0
 estado=0
@@ -255,50 +265,56 @@ cantidadDeLluviaInicial = 0
 crecimiento=0
 nocrecimiento=0
 monedastotal=84
-#Deberia ser 16, 2 es para las pruebas
+
 cantidaddeParcelas = 2
+#Deberia ser 16, 2 es para las pruebas
 cantidaddeturnos = 25
 
 elementosdecadaparcela=[tipodecultivo, estado, cantidadDeLluviaInicial, crecimiento, nocrecimiento] #elementos que hay en cada parcela (lista2)
 listaparcelas=[]
 
 for i in range (cantidaddeParcelas):
-    listaparcelas.append(elementosdecadaparcela[:])#parcela
-
-#falta plantar (listas de parcelas[j]=listab)
-
-for i in range (cantidaddeturnos):
+    listanueva=[]
+    listaparcelas.append(listanueva)#parcela
+    for x in elementosdecadaparcela:
+        listanueva.append(x)
+        
+for i in range (1,cantidaddeturnos):
     random = funciondevuelveclima(i) #random con los datos del archivo de clima (lista1)
     monedasturno = 0
+    print("\n turno",i)
+    print(listaparcelas,"estado ambas parcelas")
     for j in range (cantidaddeParcelas):
+        print("parcela",j)
         #apuesta
-        print(listaparcelas)
-        listadeapuesta = apuesta(monedastotal,listaparcelas[j])
-       # print(listadeapuesta)
-        print(listaparcelas[j])
-        print(listaparcelas[j])
+        print(listaparcelas,"estado ambas parcelas")
+        listadeapuesta=apuesta(monedastotal,listaparcelas[j])
+      
         monedastotal = listadeapuesta[0]
-        listaparcelas[j] = listadeapuesta[1]
-        #controlparcelas
-        funcionclima = clima(random,listaparcelas[j])
-        listaparcelas[j][2] = funcionclima[2]
-        listaparcelas[j][3] = funcionclima[0]
-        listaparcelas[j][4] = funcionclima[1]
-        funcioncosecha = cosecha(listaparcelas[j])
-        #reemplazo valores en la lista de cada parcela
-        rendimientoCosecha = funcioncosecha[0]
-        muereCosecha = funcioncosecha[1]
-        if (muereCosecha == 1 or rendimientoCosecha != 0):
-            listaparcelas[j] = elementosdecadaparcela[:]
+       
         
-        else:
-            listaparcelas[j][1] = 1
-            listaparcelas[j][2] += funcionclima[2]
-            listaparcelas[j][3] += funcionclima[0]
-            listaparcelas[j][4] += funcionclima[1]
-         
-        monedasturno += ganancia(listaparcelas[j],funcioncosecha)
-    monedastotal += monedasturno
+        funcionclima=clima(random,listaparcelas[j])
+      
+        funcioncosecha=cosecha(listaparcelas[j]) #LE DOY LA PARCELA
+        
+
+        print(" IMPRIMO FUNCION COSECHA, (rendmiento,muerte)",funcioncosecha)
+        
+        #reemplazo valores en la lista de cada parcela
+        rendimientoCosecha = funcioncosecha[0] #si es cero todavia no cosecho
+        muereCosecha = funcioncosecha[1] #si es 1 se murio, sino es cero
+        cultivoxparcela=listaparcelas[j][0] #voy a necesitar que cultivo hay
+        
+        print("IMPRIMO LA FUNCION CLIMA (parcela,muerte)",funcionclima)
+        muerteporcatastrofenatural=funcionclima[1]
+        
+        if (muereCosecha == 1) or (muerteporcatastrofenatural==1) or (rendimientoCosecha != 0):
+            listaparcelas[j]=[0,0,0,0,0]
+          
+        monedasturno+=ganancia(cultivoxparcela,rendimientoCosecha) #le doy la parcela y si cosecho o murio
+        print("MONEDAS TURNO \n",monedasturno)
+    monedastotal+=monedasturno
+    print("MONEDAS TOTAL \n",monedastotal)
     
     
     #PARA DESPUES ACOPLAR CON PANTALLA
