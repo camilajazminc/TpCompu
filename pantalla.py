@@ -190,7 +190,7 @@ def main():
                 tipodecultivo = 0
             
             #pasar de turno
-            if ((ultimoClick[0] >= 175) and (ultimoClick[0] <= 225) and (ultimoClick[1] <= 20) and (ultimoClick[1] >= 70)):
+            if ((ultimoClick[0] >= 175) and (ultimoClick[0] <= 225) and (ultimoClick[1] <= 70) and (ultimoClick[1] >= 20)):
                 pasardeturno = 1
                 print ("pasar de turno", pasardeturno)
                 screen.blit(bavanzarseleccion,(175,20))
