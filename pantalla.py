@@ -1,4 +1,3 @@
-
 import sys, pygame
 from pygame.locals import* 
 
@@ -13,9 +12,9 @@ def unirparcelaxy (x,y):
     nparcela=-1
 
     if ((x<400) and (x>100) and (y<400) and (y>100)):
-        fila=round(((x-100)/75)+1)
-        columna=round(((y-100)/75)+1)
-        nparcela=((((fila-1)*4)+columna)-1)
+        columna=int((x-100)/75)
+        fila=int((y-100)/75)
+        nparcela=((fila*4)+columna)
     return (nparcela)
 
 #funcion que pasa el n de parcela a posicion en la pantalla
@@ -26,43 +25,12 @@ def unirxyparcela (nparcela):
     y=0
     coordenadas=0
     
-    if (nparcela==0):
-        fila,columna=(1,1)
-    elif (nparcela==1):
-        fila,columna=(1,2)
-    elif (nparcela==2):
-        fila,columna=(1,3)
-    elif (nparcela==3):
-        fila,columna=(1,4)
-    elif (nparcela==4):
-        fila,parcela=(2,1)
-    elif (nparcela==5):
-        fila,parcela=(2,2)
-    elif (nparcela==6):
-        fila,columna=(2,3)
-    elif (nparcela==7):
-        fila,columna=(2,4)
-    elif (nparcela==8):
-        fila,columna=(3,1)
-    elif (nparcela==9):
-        fila,parcela=(3,2)
-    elif (nparcela==10):
-        fila,parcela=(3,3)
-    elif (nparcela==11):
-        fila,columna=(3,4)
-    elif (nparcela==12):
-        fila,columna=(4,1)
-    elif (nparcela==13):
-        fila,columna=(4,2)
-    elif (nparcela==14):
-        fila,parcela=(4,3)
-    elif (nparcela==15):
-        fila,parcela=(4,4)
+    fila, columna = (int(nparcela/4), int(nparcela%4))
     
     if ((nparcela<=15) and (nparcela>=0)):
         
-        x=(((fila-1)*75)+100)
-        y=(((columna-1)*75)+100)
+        x=((columna*75)+100)
+        y=((fila*75)+100)
         coordenadas=(x,y) 
     return(coordenadas) 
 
@@ -102,7 +70,12 @@ def main():
     #Cursor1=Cursor()
     salir=False
     acumulador=[]
-    tipodecultivo=0
+    tipodecultivo = 0
+    frutasFinas = 1
+    aloeVera = 2
+    hongos = 3
+    nparcela = -1
+    pasardeturno = 0
     while salir!=True:  
         for event in pygame.event.get():
            
@@ -115,9 +88,9 @@ def main():
                  #  tipodecultivo=3
                  
            if event.type == MOUSEBUTTONDOWN:
-            mousex, mousey = pygame.mouse.get_pos()
-            click=(mousex,mousey)
-            acumulador.append(click)
+               mousex, mousey = pygame.mouse.get_pos()
+               click=(mousex,mousey)
+               acumulador.append(click)
             #if ((mousex>=500) and (mousex<=550) and (mousey>=50) and (mousey<=100)):
              #   tipodecultivo=1
             #elif ((mousex>=500) and (mousex<=550) and (mousey>=150) and (mousey<=200)):
@@ -180,34 +153,47 @@ def main():
         Plata=fuente2.render("Plata",0,(0,0,0))
         screen.blit(Plata,(515,330))
         
+        
         if (len(acumulador)>=2):
-            if (((acumulador[len(acumulador)-2])[0]>=(500)) and ((acumulador[len(acumulador)-2])[0]<=(550)) and ((acumulador[len(acumulador)-2])[1]<=(100)) and ((acumulador[len(acumulador)-2])[1]>=(50))):
-                if (((acumulador[len(acumulador)-1])[0]>=(100)) and ((acumulador[len(acumulador)-1])[0]<=(400)) and ((acumulador[len(acumulador)-1])[1]<=(400)) and ((acumulador[len(acumulador)-1])[1]>=(100))):
+            clickAnterior = acumulador[len(acumulador)-2]
+            ultimoClick = acumulador[len(acumulador)-1]  
+            
+            #guardo el tipo de cultivo
+            if ((clickAnterior[0] >= 500) and (clickAnterior[0] <= 550) and (clickAnterior[1] <= 100) and (clickAnterior[1] >= 50)):
+                tipodecultivo = frutasFinas
+                                           
+            elif ((clickAnterior[0] >= 500) and (clickAnterior[0] <= 550) and (clickAnterior[1] <= 200) and (clickAnterior[1] >= 150)):
+                tipodecultivo = aloeVera    
                     
-                    tipodecultivo=1
-                    nparcela=unirparcelaxy(acumulador[len(acumulador)-1][0],acumulador[len(acumulador)-1][1])
-                    ubicacion=unirxyparcela(nparcela)
+            elif  ((clickAnterior[0] >= 500) and (clickAnterior[0] <= 550) and (clickAnterior[1] <= 300) and (clickAnterior[1] >= 250)):
+                tipodecultivo = hongos
+                
+                 
+            #guardo la parcela  
+            if ((ultimoClick[0] >= 100) and (ultimoClick[0] <= 400) and (ultimoClick[1] <= 400) and (ultimoClick[1] >= 100)):
+                    nparcela = unirparcelaxy(ultimoClick[0],ultimoClick[1])
+                    print("parcela número", nparcela)
+                    ubicacion = unirxyparcela(nparcela)
                     print(ubicacion)
+            
+            #combino tipo de cultivo y parcela
+            if (nparcela != -1 and tipodecultivo != 0):
+                if tipodecultivo == frutasFinas:
                     screen.blit(parcelaff,ubicacion)
-                    
-            elif (((acumulador[len(acumulador)-2])[0]>=(500)) and ((acumulador[len(acumulador)-2])[0]<=(550)) and ((acumulador[len(acumulador)-2])[1]<=(200)) and ((acumulador[len(acumulador)-2])[1]>=(150))):
-                if (((acumulador[len(acumulador)-1])[0]>=(100)) and ((acumulador[len(acumulador)-1])[0]<=(400)) and ((acumulador[len(acumulador)-1])[1]<=(400)) and ((acumulador[len(acumulador)-1])[1]>=(100))):
-                    
-                    tipodecultivo=2
-                    nparcela=unirparcelaxy(acumulador[len(acumulador)-1][0],acumulador[len(acumulador)-1][1])
-                    ubicacion=unirxyparcela(nparcela)
-                    print(ubicacion)
+                elif tipodecultivo == aloeVera:
                     screen.blit(parcelaa,ubicacion)
-                    
-            elif  (((acumulador[len(acumulador)-2])[0]>=(500)) and ((acumulador[len(acumulador)-2])[0]<=(550)) and ((acumulador[len(acumulador)-2])[1]<=(300)) and ((acumulador[len(acumulador)-2])[1]>=(250))):
-                if (((acumulador[len(acumulador)-1])[0]>=(100)) and ((acumulador[len(acumulador)-1])[0]<=(400)) and ((acumulador[len(acumulador)-1])[1]<=(400)) and ((acumulador[len(acumulador)-1])[1]>=(100))):
-                    
-                    tipodecultivo=3
-                    nparcela=unirparcelaxy(acumulador[len(acumulador)-1][0],acumulador[len(acumulador)-1][1])
-                    ubicacion=unirxyparcela(nparcela)
-                    print(ubicacion)
+                elif tipodecultivo == hongos:
                     screen.blit(parcelah,ubicacion)
-                    
+                
+                print ("tipo de cultivo", tipodecultivo)
+                nparcela = -1
+                tipodecultivo = 0
+            
+            #pasar de turno
+            if ((ultimoClick[0] >= 175) and (ultimoClick[0] <= 225) and (ultimoClick[1] <= 70) and (ultimoClick[1] >= 20)):
+                pasardeturno = 1
+                print ("pasar de turno", pasardeturno)
+                screen.blit(bavanzarseleccion,(175,20))
         
         pygame.display.flip()
 
