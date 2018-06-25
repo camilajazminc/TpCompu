@@ -153,53 +153,27 @@ def main():
                          screen.blit(bavanzarseleccion,(175,20))
             
             #guardo el tipo de cultivo
-                        if (monedastotal>=10):
-                            if ((clickAnterior[0] >= 500) and (clickAnterior[0] <= 550) and (clickAnterior[1] <= 100) and (clickAnterior[1] >= 50)):
-                                parcela[tipodecultivo] = frutasFinas
-                                monedastotal-=10
-                                parcela[estado]=1               
-                            elif ((clickAnterior[0] >= 500) and (clickAnterior[0] <= 550) and (clickAnterior[1] <= 200) and (clickAnterior[1] >= 150)):
-                                parcela[tipodecultivo] = aloeVera    
-                                monedastotal-=1
-                                parcela[estado]=1
-                            elif  ((clickAnterior[0] >= 500) and (clickAnterior[0] <= 550) and (clickAnterior[1] <= 300) and (clickAnterior[1] >= 250)):
+                        if ((clickAnterior[0] >= 500) and (clickAnterior[0] <= 550) and (clickAnterior[1] <= 100) and (clickAnterior[1] >= 50)):
+                                parcela[tipodecultivo] = frutasFinas                    
+                        elif ((clickAnterior[0] >= 500) and (clickAnterior[0] <= 550) and (clickAnterior[1] <= 200) and (clickAnterior[1] >= 150)):
+                                parcela[tipodecultivo] = aloeVera     
+                        elif  ((clickAnterior[0] >= 500) and (clickAnterior[0] <= 550) and (clickAnterior[1] <= 300) and (clickAnterior[1] >= 250)):
                                 parcela[tipodecultivo] = hongos
-                                monedastotal-=5
-                                parcela[estado]=1
-                        elif ((monedastotal>=5) and (monedastotal<10))):
-                            if ((clickAnterior[0] >= 500) and (clickAnterior[0] <= 550) and (clickAnterior[1] <= 100) and (clickAnterior[1] >= 50)):
-                                print("No tiene monedas suficientes")             
-                            elif ((clickAnterior[0] >= 500) and (clickAnterior[0] <= 550) and (clickAnterior[1] <= 200) and (clickAnterior[1] >= 150)):
-                                parcela[tipodecultivo] = aloeVera    
-                                monedastotal-=1
-                                parcela[estado]=1
-                            elif  ((clickAnterior[0] >= 500) and (clickAnterior[0] <= 550) and (clickAnterior[1] <= 300) and (clickAnterior[1] >= 250)):
-                                parcela[tipodecultivo] = hongos
-                                monedastotal-=5
-                                parcela[estado]=1
-                        else:
-                             if ((clickAnterior[0] >= 500) and (clickAnterior[0] <= 550) and (clickAnterior[1] <= 100) and (clickAnterior[1] >= 50)):
-                                print("No tiene monedas suficientes")             
-                             elif ((clickAnterior[0] >= 500) and (clickAnterior[0] <= 550) and (clickAnterior[1] <= 200) and (clickAnterior[1] >= 150)):
-                                parcela[tipodecultivo] = aloeVera    
-                                monedastotal-=1
-                                parcela[estado]=1
-                             elif  ((clickAnterior[0] >= 500) and (clickAnterior[0] <= 550) and (clickAnterior[1] <= 300) and (clickAnterior[1] >= 250)):
-                                 print("No tiene monedas suficientes")
-                                 
-
             #combino tipo de cultivo y parcela
+                        
                         if (nparcela != -1 and parcela[tipodecultivo] != 0):
-                                if parcela[tipodecultivo] == frutasFinas:
+                            if ((monedastotal>=10) and (parcela[tipodecultivo] == frutasFinas)):
                                     screen.blit(parcelaff,ubicacion)
-                                elif parcela[tipodecultivo] == aloeVera:
+                                    monedastotal-=10
+                                    parcela[estado]=1 
+                            elif (((monedastotal>=5) and (monedastotal<10)) and (parcela[tipodecultivo] == hongos)):
                                     screen.blit(parcelaa,ubicacion)
-                                elif parcela[tipodecultivo] == hongos:
-                                    screen.blit(parcelah,ubicacion)
-                
-                                print ("tipo de cultivo", parcela[tipodecultivo])
-                                nparcela = -1
-                                parcela[tipodecultivo] = 0
+                                    monedastotal-=1
+                                    parcela[estado]=1
+                            elif parcela[tipodecultivo] == aloeVera:
+                                    screen.blit(parcelaa,ubicacion)
+                                    monedastotal-=1
+                                    parcela[estado]=1
                             
                 lista1=[monedastotal,parcela]
     
