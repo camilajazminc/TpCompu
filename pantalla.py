@@ -42,13 +42,6 @@ def main():
     
     pygame.display.set_caption("El Gran Granjero")
     
-    #defino un cuadradito que siga al cursor
-    #class Cursor(pygame.Rect):
-     #       def __init__(self):
-      #          pygame.Rect.__init__(self,0,0,1,1)
-       #     def update(self):
-        #        self.left,self.top=pygame.mouse.get_pos()
-    
     #fotosparalosbotones
     bcultivo1=pygame.image.load("frutasfinas.png")
     b1seleccion=pygame.image.load("frutasfinasseleccion.png")
@@ -78,25 +71,12 @@ def main():
     pasardeturno = 0
     while salir!=True:  
         for event in pygame.event.get():
-           
-           #if event.type==pygame.MOUSEBUTTONDOWN:
-            #    if Cursor1.colliderect(bcultivo1.rect):
-             #       tipodecultivo=1
-              #  elif Cursor1.colliderect(bcultivo2.rect):
-               #     tipodecultivo=2
-                #elif Cursor1.colliderect(bcultivo3.rect):
-                 #  tipodecultivo=3
+
                  
            if event.type == MOUSEBUTTONDOWN:
                mousex, mousey = pygame.mouse.get_pos()
                click=(mousex,mousey)
                acumulador.append(click)
-            #if ((mousex>=500) and (mousex<=550) and (mousey>=50) and (mousey<=100)):
-             #   tipodecultivo=1
-            #elif ((mousex>=500) and (mousex<=550) and (mousey>=150) and (mousey<=200)):
-             #   tipodecultivo=2
-            #elif ((mousex>=500) and (mousex<=550) and (mousey>=250) and (mousey<=300)):
-             #   tipodecultivo=3
             
            if event.type == QUIT: 
                 salir=True
@@ -122,11 +102,6 @@ def main():
         screen.blit(parcela,(175,325))
         screen.blit(parcela,(250,325))
         screen.blit(parcela,(325,325))
-       
-       #Uso del mouse
-        #posx,posy=pygame.mouse.get_pos()
-       # Cursor1.update()
-        #pygame.draw.rect(screen, (100,0,0), (100, 100, 300, 300), 0)
         
         #horizontales
         pygame.draw.line(screen, (0,0,0),(100,100),(400,100),5)
