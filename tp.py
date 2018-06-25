@@ -229,7 +229,7 @@ def apuesta (monedastotal,parcela):
                     elif parcela[tipodecultivo]==3:
                         monedastotal-=5
                         parcela[estado]=1
-                elif (monedastotal>=5):
+                elif ((monedastotal>=5) and (monedastotal<10)):
                     parcela[tipodecultivo]=int(input("Ingrese 2 para aloe vera o 3 para hngos."))
                     if parcela[tipodecultivo]==2:
                         monedastotal-=1
