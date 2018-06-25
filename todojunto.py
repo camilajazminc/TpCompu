@@ -139,8 +139,22 @@ def main():
         Plata=fuente2.render("Plata",0,(0,0,0))
         screen.blit(Plata,(515,330))
             
+               cultivo=0
         
-        def apuesta (monedastotal,parcela,nparcela,ubicacion): 
+        if (len(acumulador)>=2):
+                        clickAnterior = acumulador[len(acumulador)-2]
+                        ultimoClick = acumulador[len(acumulador)-1]
+        
+        #guardo el tipo de cultivo
+                        if ((clickAnterior[0] >= 500) and (clickAnterior[0] <= 550) and (clickAnterior[1] <= 100) and (clickAnterior[1] >= 50)):
+                            cultivo = frutasFinas                    
+                        elif ((clickAnterior[0] >= 500) and (clickAnterior[0] <= 550) and (clickAnterior[1] <= 200) and (clickAnterior[1] >= 150)):
+                            cultivo = aloeVera     
+                        elif  ((clickAnterior[0] >= 500) and (clickAnterior[0] <= 550) and (clickAnterior[1] <= 300) and (clickAnterior[1] >= 250)):
+                            cultivo = hongos
+        
+                        
+        def apuesta (monedastotal,parcela,nparcela,ubicacion,cultivo): 
              if (monedastotal>0):   
                 if parcela[estado]==0:
                     if (len(acumulador)>=2):
@@ -151,29 +165,29 @@ def main():
                          pasardeturno = 1
                          print ("pasar de turno", pasardeturno)
                          screen.blit(bavanzarseleccion,(175,20))
-            
-            #guardo el tipo de cultivo
-                        if ((clickAnterior[0] >= 500) and (clickAnterior[0] <= 550) and (clickAnterior[1] <= 100) and (clickAnterior[1] >= 50)):
-                                parcela[tipodecultivo] = frutasFinas                    
-                        elif ((clickAnterior[0] >= 500) and (clickAnterior[0] <= 550) and (clickAnterior[1] <= 200) and (clickAnterior[1] >= 150)):
-                                parcela[tipodecultivo] = aloeVera     
-                        elif  ((clickAnterior[0] >= 500) and (clickAnterior[0] <= 550) and (clickAnterior[1] <= 300) and (clickAnterior[1] >= 250)):
-                                parcela[tipodecultivo] = hongos
-            #combino tipo de cultivo y parcela
+                         
+                    #combino tipo de cultivo y parcela
                         
-                        if (nparcela != -1 and parcela[tipodecultivo] != 0):
-                            if ((monedastotal>=10) and (parcela[tipodecultivo] == frutasFinas)):
+                        if (nparcela != -1 and cultivo != 0):
+                            if ((monedastotal>=10) and (cultivofrutasFinas)):
+                                    parcela[tipodecultivo] == frutasFinas
                                     screen.blit(parcelaff,ubicacion)
                                     monedastotal-=10
                                     parcela[estado]=1 
-                            elif (((monedastotal>=5) and (monedastotal<10)) and (parcela[tipodecultivo] == hongos)):
+                            elif (((monedastotal>=5) and (monedastotal<10)) and (cultivo == hongos)):
+                                    parcela[tipodecultivo] == hongos
                                     screen.blit(parcelaa,ubicacion)
                                     monedastotal-=1
                                     parcela[estado]=1
-                            elif parcela[tipodecultivo] == aloeVera:
+                            elif cultivo == aloeVera:
+                                    parcela[tipodecultivo] == aloeVera
                                     screen.blit(parcelaa,ubicacion)
                                     monedastotal-=1
                                     parcela[estado]=1
+                                
+                            print ("tipo de cultivo", parcela[tipodecultivo])
+                            nparcela = -1
+                            parcela[tipodecultivo] = 0
                             
                 lista1=[monedastotal,parcela]
     
