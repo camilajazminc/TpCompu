@@ -455,7 +455,7 @@ def main():
                     monedasturno+=ganancia(cultivoxparcela,rendimientoCosecha) #le doy la parcela y si cosecho o murio
                     print("MONEDAS TURNO \n",monedasturno)
                 monedastotal+=monedasturno
-                #monedasparaimprimir=fuente1.render(monedastotal,0,(0,0,0))
+                #monedasparaimprimir=fuente1.render(monedastotal,0,(0,0,0)) LO DEJO ASÍ PORQUE ME TIRA EL ERROR TypeError: text must be a unicode or bytes
                 #screen.blit(monedasparaimprimir,(500,320))
                 print("MONEDAS TOTAL \n",monedastotal)
 
