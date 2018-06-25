@@ -166,7 +166,7 @@ def main():
                                 parcela[tipodecultivo] = hongos
                                 monedastotal-=5
                                 parcela[estado]=1
-                        elif (monedastotal>=5):
+                        elif ((monedastotal>=5) and (monedastotal<10))):
                             if ((clickAnterior[0] >= 500) and (clickAnterior[0] <= 550) and (clickAnterior[1] <= 100) and (clickAnterior[1] >= 50)):
                                 print("No tiene monedas suficientes")             
                             elif ((clickAnterior[0] >= 500) and (clickAnterior[0] <= 550) and (clickAnterior[1] <= 200) and (clickAnterior[1] >= 150)):
