@@ -310,19 +310,7 @@ def main():
 
     #Cursor1=Cursor()
     salir=False
-    
-    
-            
-    
-   
-        
-    
-    
-    
 
-        
-    
-    
             #acá empieza el programa principal
 
 #El cultivo 0 sin cultivo, 1 son las frutas finas, 2 el aloe vera y 3 los hongos
