@@ -60,10 +60,3 @@ def topscore (puntaje): #LA FUNCION guarda puntaje y nombre para despues mostrar
             for nombre in nombres:
                 
                 print("{},{}".format(puntaje,nombre))
-        
-       
-
-        
-
-
-
