@@ -416,6 +416,8 @@ def main():
                            #PASAR DE TURNO
                     if ((ultimoClick[0] >= 175) and (ultimoClick[0] <= 225) and (ultimoClick[1] <= 70) and (ultimoClick[1] >= 20)):
                         turno+=1
+                        
+                            
                         print ("pasar de turno")
                         screen.blit(pasardeturno,(110,70))
                         screen.blit(bavanzarseleccion,(175,20))
@@ -454,6 +456,12 @@ def main():
                             monedasturno+=ganancia(cultivoxparcela,rendimientoCosecha) #le doy la parcela y si cosecho o murio
                             #print("MONEDAS TURNO \n",monedasturno)
                         monedastotal+=monedasturno
+                        with open('archivohistorial.txt','a+') as fp:
+                            fp.write("turno ")
+                            fp.write('%r\n' % turno)
+                            fp.write('%r\n' % listaparcelas)
+                            fp.write("cantidad de monedas ")
+                            fp.write('%r\n' % monedastotal)
                     else:
                         monedasturno = 0
                         screen.blit(normalverde,(110,70))
