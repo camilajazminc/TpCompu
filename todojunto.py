@@ -176,12 +176,15 @@ def main():
                 catn1=(random.randint(0,1000))
                 #el random de catastrofe natural es distinto
                 if (catn1>g) and (catn1<h):
-                    print("CATASTROFE NATURAL!!!!!!!")
+                    print("catástrofe natural!")
+                    #catastrofenatural=fuente2.render("CATÁSTROFE NATURAL",1,(0,0,0))
+                    #screen.blit(catastrofenatural,(350,10))
                     catn=1
                 else:
                     catn=0
     
             lista1=[temp,lluv,vien,catn]
+            #print("el clima es", lista1)
             return(lista1)
         
     def apuesta (monedastotal,parcela,nparcela,ubicacion,cultivo): 
@@ -198,62 +201,62 @@ def main():
                         elif  ((clickAnterior[0] >= 500) and (clickAnterior[0] <= 550) and (clickAnterior[1] <= 300) and (clickAnterior[1] >= 250)):
                             cultivo = hongos
                     #combino tipo de cultivo y parcela
-                        print(cultivo)
                         
                         if (nparcela != -1 and cultivo != 0):
                             if ((monedastotal>=10) and (cultivo==frutasFinas)):
-                                    parcela[tipodecultivo] == frutasFinas
+                                    parcela[tipodecultivo] = frutasFinas
                                     screen.blit(parcelaff,ubicacion)
                                     monedastotal-=10
                                     parcela[estado]=1 
-                            elif (((monedastotal>=5) and (monedastotal<10)) and (cultivo == hongos)):
-                                    parcela[tipodecultivo] == hongos
-                                    screen.blit(parcelaa,ubicacion)
-                                    monedastotal-=1
+                            elif ((monedastotal>=5)  and (cultivo == hongos)):
+                                    parcela[tipodecultivo] = hongos
+                                    screen.blit(parcelah,ubicacion)
+                                    monedastotal-=5
                                     parcela[estado]=1
                             elif cultivo == aloeVera:
-                                    parcela[tipodecultivo] == aloeVera
+                                    parcela[tipodecultivo] = aloeVera
                                     screen.blit(parcelaa,ubicacion)
                                     monedastotal-=1
                                     parcela[estado]=1
-                                
-                            print ("tipo de cultivo", parcela[tipodecultivo])
-                            nparcela = -1
-                            parcela[tipodecultivo] = 0
+                            cultivo=0
+                            #print ("tipo de cultivo", parcela[tipodecultivo])
+
                             
                 lista1=[monedastotal,parcela]
-    
-                return (lista1)
+                #print("monedas desde apuesta", monedastotal)
+                return monedastotal,parcela
     
     def clima (random,parcela):
        
-            muerte=0
-            if random[3]==1: #CATASTROFE NATURAL
-                muerte=1
-            else:
-                if parcela[tipodecultivo] == frutasFinas: 
-                    if (((random[0]>=9)and(random[0]<=25)) and ((random[1]<=112)and(random[1]>=34)) and (random[2]<=30)):
-                        parcela[crecimientoDelCultivo]+=1
-                        parcela[cantidadDeLluvia]+=random[1]
-                    else:
-                        parcela[turnosSinCrecer]+= 1
-            
-                elif parcela[tipodecultivo] == aloeVera:
-                    if (((random[0]>=1)and(random[0]<=40)) and (random[2]<=100)):
-                        parcela[crecimientoDelCultivo]+=1
-                        parcela[cantidadDeLluvia]+=random[1]
-                    else:
-                       parcela[turnosSinCrecer]+=1
-            
-                elif parcela[tipodecultivo] == hongos:
-                    if (((random[0]>=6)and(random[0]<=30)) and ((random[1]<=200)and(random[1]>=34)) and (random[2]<=80)):
-                       parcela[crecimientoDelCultivo]+=1
-                       parcela[cantidadDeLluvia]+=random[1]
-                    else:
-                        parcela[turnosSinCrecer]+= 1
-    
-            return ([parcela,muerte])
-    def cosecha (parcela): #PORQUE EVALUAMOS SI MUERE EN LA FUNCION COSECHA Y EN LA FUNCION CLIMA FIJARSE QUE ONDA
+        muerte=0
+        if random[3]==1: #CATASTROFE NATURAL
+            muerte=1
+        else:
+            if parcela[tipodecultivo] == frutasFinas: 
+                if (((random[0]>=9)and(random[0]<=25)) and ((random[1]<=112)and(random[1]>=34)) and (random[2]<=30)):
+                    parcela[crecimientoDelCultivo]+=1
+                    parcela[cantidadDeLluvia]+=random[1]
+                else:
+                    parcela[turnosSinCrecer]+= 1
+                
+            elif parcela[tipodecultivo] == aloeVera:
+                if (((random[0]>=1)and(random[0]<=40)) and (random[2]<=100)):
+                    parcela[crecimientoDelCultivo]+=1
+                    parcela[cantidadDeLluvia]+=random[1]
+                else:
+                    parcela[turnosSinCrecer]+=1
+                
+            elif parcela[tipodecultivo] == hongos:
+                if (((random[0]>=6)and(random[0]<=30)) and ((random[1]<=200)and(random[1]>=34)) and (random[2]<=80)):
+                    parcela[crecimientoDelCultivo]+=1
+                    parcela[cantidadDeLluvia]+=random[1]
+                else:
+                    parcela[turnosSinCrecer]+= 1
+        print("la cantidad de lluvia es",parcela[cantidadDeLluvia])
+        return ([parcela,muerte])
+
+        
+    def cosecha (parcela): 
             rendimiento=0
             muere = 0
             if parcela[tipodecultivo] == frutasFinas: 
@@ -273,7 +276,7 @@ def main():
                 else:
                     muere=1
     
-            if parcela[tipodecultivo] == aloeVera:
+            elif parcela[tipodecultivo] == aloeVera:
                 if parcela[turnosSinCrecer] <= turnosMaximosSinCrecer:
                     if parcela[crecimientoDelCultivo]==1: #cosecho
  
@@ -288,7 +291,7 @@ def main():
                 else:
                     muere=1
    
-            if parcela[tipodecultivo] == hongos : 
+            elif parcela[tipodecultivo] == hongos : 
                 if parcela[turnosSinCrecer] <= turnosMaximosSinCrecer:
                     if parcela[cantidadDeLluvia] > lluviaMaximoHongos:
                         muerte=1
@@ -321,135 +324,166 @@ def main():
     crecimiento=0
     nocrecimiento=0
     monedastotal=84
-    cantidaddeParcelas = 2
-#Deberia ser 16, 2 es para las pruebas
+    cultivo=0
+    cantidaddeParcelas = 16
+
     cantidaddeturnos = 25
     elementosdecadaparcela=[tipodecultivo, Estado, cantidadDeLluviaInicial, crecimiento, nocrecimiento] #elementos que hay en cada parcela (lista2)
     listaparcelas=[]
 
     for i in range (cantidaddeParcelas):
-            listanueva=[]
-            listaparcelas.append(listanueva)#parcela
-    for x in elementosdecadaparcela:
-                listanueva.append(x)
-        
-    for i in range (1,cantidaddeturnos):
-            
-            if (len(acumulador)>=1):
-                clickAnterior = acumulador[len(acumulador)-2]
-                ultimoClick = acumulador[len(acumulador)-1]
-                    #PASAR DE TURNO
-                if ((ultimoClick[0] >= 175) and (ultimoClick[0] <= 225) and (ultimoClick[1] <= 70) and (ultimoClick[1] >= 20)):
-                    i+=1
-                    print ("pasar de turno")
-                    screen.blit(bavanzarseleccion,(175,20))
-                    random = funciondevuelveclima(i) #random con los datos del archivo de clima (lista1)
-                    monedasturno = 0
-                    print("\n turno",i)
-            else:
-                    random = funciondevuelveclima(i)
-                    monedasturno = 0
-                    
-                         
-        #guardo la parcela
-            if (len(acumulador)>=2):
-                clickAnterior = acumulador[len(acumulador)-2]
-                ultimoClick = acumulador[len(acumulador)-1]
-                if ((ultimoClick[0] >= 100) and (ultimoClick[0] <= 400) and (ultimoClick[1] <= 400) and (ultimoClick[1] >= 100)):
-                    nparcela = unirparcelaxy(ultimoClick[0],ultimoClick[1])
-                    print("parcela número", nparcela)
-                    ubicacion = unirxyparcela(nparcela)
-                    print(ubicacion)
-    
-                    for nparcela in range (cantidaddeParcelas):
-                        print("parcela",nparcela)
-                    #apuesta
-        
-                        listadeapuesta=apuesta(monedastotal,listaparcelas[nparcela],nparcela,ubicacion,cultivo)
-      
-                        monedastotal = listadeapuesta[0]
-       
-                        funcionclima=clima(random,listaparcelas[nparcela])
-      
-                        funcioncosecha=cosecha(listaparcelas[nparcela]) #LE DOY LA PARCELA
-                    #reemplazo valores en la lista de cada parcela
-                        rendimientoCosecha = funcioncosecha[0] #si es cero todavia no cosecho
-                        muereCosecha = funcioncosecha[1] #si es 1 se murio, sino es cero
-                        cultivoxparcela=listaparcelas[nparcela][0] #voy a necesitar que cultivo hay
-        
-                        muerteporcatastrofenatural=funcionclima[1]
-        
-                    if (muereCosecha == 1) or (muerteporcatastrofenatural==1) or (rendimientoCosecha != 0):
-                            listaparcelas[nparcela]=[0,0,0,0,0]
-          
-                    monedasturno+=ganancia(cultivoxparcela,rendimientoCosecha) #le doy la parcela y si cosecho o murio
-                    print("MONEDAS TURNO \n",monedasturno)
-                monedastotal+=monedasturno
-                print("MONEDAS TOTAL \n",monedastotal)
+        listanueva=[]
+        listaparcelas.append(listanueva)#parcela
+        for x in elementosdecadaparcela:
+            listanueva.append(x)
     
     #PARA DESPUES ACOPLAR CON PANTALLA
-    #monedasparaimprimir=fuente1.render(monedastotales,0,(0,0,0))
-   # screen.blit(monedasparaimprimir,(500,320))
     
+    screen.fill(Color)#color de fondo de la pantalla
+    screen.blit(bcultivo1,(500,50))#imprimimos en pantalla las fotos de los botones
+    screen.blit(bcultivo2,(500,150))
+    screen.blit(bcultivo3,(500,250))
+    screen.blit(bavanzar,(175,20))
+    screen.blit(parcela,(100,100))
+    screen.blit(parcela,(175,100))
+    screen.blit(parcela,(250,100))
+    screen.blit(parcela,(325,100))
+    screen.blit(parcela,(100,175))
+    screen.blit(parcela,(175,175))
+    screen.blit(parcela,(250,175))
+    screen.blit(parcela,(325,175))
+    screen.blit(parcela,(100,250))
+    screen.blit(parcela,(175,250))
+    screen.blit(parcela,(250,250))
+    screen.blit(parcela,(325,250))
+    screen.blit(parcela,(100,325))
+    screen.blit(parcela,(175,325))
+    screen.blit(parcela,(250,325))
+    screen.blit(parcela,(325,325))
+
+        
+        #horizontales
+    pygame.draw.line(screen, (0,0,0),(100,100),(400,100),5)
+    pygame.draw.line(screen, (0,0,0),(100,175),(400,175),5)
+    pygame.draw.line(screen, (0,0,0),(100,250),(400,250),5)
+    pygame.draw.line(screen, (0,0,0),(100,325),(400,325),5)
+    pygame.draw.line(screen, (0,0,0),(100,400),(400,400),5)
+
+        #verticales
+    pygame.draw.line(screen, (0,0,0),(100,100),(100,400),5)
+    pygame.draw.line(screen, (0,0,0),(175,100),(175,400),5)
+    pygame.draw.line(screen, (0,0,0),(250,100),(250,400),5)
+    pygame.draw.line(screen, (0,0,0),(325,100),(325,400),5)
+    pygame.draw.line(screen, (0,0,0),(400,100),(400,400),5)
+        
+        #botóndeplata
+    pygame.draw.rect(screen, (100,100,100), (490, 320, 100, 50), 0)
+        
+        #texto sobre botones
+    fuente=pygame.font.Font(None,50)
+    fuente1=pygame.font.Font(None,20)
+    fuente2=pygame.font.Font(None,30)
+    Plata=fuente2.render("Plata",0,(0,0,0))
+    screen.blit(Plata,(515,330))
+    turno=0
+    monedasturno = 0
+    nparcela = -1
+    #parcela[tipodecultivo] = 0
     while salir!=True:  
         for event in pygame.event.get():
-                 
+         if (event.type == MOUSEBUTTONDOWN or event.type == QUIT):        
            if event.type == MOUSEBUTTONDOWN:
                mousex, mousey = pygame.mouse.get_pos()
                click=(mousex,mousey)
                acumulador.append(click)
+               #print("los clicks", acumulador)
             
            if event.type == QUIT: 
                 salir=True
-        screen.fill(Color)#color de fondo de la pantalla
-        
-        screen.blit(bcultivo1,(500,50))#imprimimos en pantalla las fotos de los botones
-        screen.blit(bcultivo2,(500,150))
-        screen.blit(bcultivo3,(500,250))
-        screen.blit(bavanzar,(175,20))
-        screen.blit(parcela,(100,100))
-        screen.blit(parcela,(175,100))
-        screen.blit(parcela,(250,100))
-        screen.blit(parcela,(325,100))
-        screen.blit(parcela,(100,175))
-        screen.blit(parcela,(175,175))
-        screen.blit(parcela,(250,175))
-        screen.blit(parcela,(325,175))
-        screen.blit(parcela,(100,250))
-        screen.blit(parcela,(175,250))
-        screen.blit(parcela,(250,250))
-        screen.blit(parcela,(325,250))
-        screen.blit(parcela,(100,325))
-        screen.blit(parcela,(175,325))
-        screen.blit(parcela,(250,325))
-        screen.blit(parcela,(325,325))
-        
-        #horizontales
-        pygame.draw.line(screen, (0,0,0),(100,100),(400,100),5)
-        pygame.draw.line(screen, (0,0,0),(100,175),(400,175),5)
-        pygame.draw.line(screen, (0,0,0),(100,250),(400,250),5)
-        pygame.draw.line(screen, (0,0,0),(100,325),(400,325),5)
-        pygame.draw.line(screen, (0,0,0),(100,400),(400,400),5)
+                
+           pasardeturno=pygame.image.load("pasardeturno.png")
+           normalverde=pygame.image.load("normalverde.png")
+               
 
-        #verticales
-        pygame.draw.line(screen, (0,0,0),(100,100),(100,400),5)
-        pygame.draw.line(screen, (0,0,0),(175,100),(175,400),5)
-        pygame.draw.line(screen, (0,0,0),(250,100),(250,400),5)
-        pygame.draw.line(screen, (0,0,0),(325,100),(325,400),5)
-        pygame.draw.line(screen, (0,0,0),(400,100),(400,400),5)
-        
-        #botóndeplata
-        pygame.draw.rect(screen, (100,100,100), (490, 320, 100, 50), 0)
-        
-        #texto sobre botones
-        fuente=pygame.font.Font(None,50)
-        fuente1=pygame.font.Font(None,15)
-        fuente2=pygame.font.Font(None,30)
-        Plata=fuente2.render("Plata",0,(0,0,0))
-        screen.blit(Plata,(515,330))
-        
-        
-
+           if(turno==0):
+                #turno=1
+                random = funciondevuelveclima(turno)
+           if turno < 24:        
+               if (len(acumulador)>=1):                
+                    clickAnterior = acumulador[len(acumulador)-2]
+                    ultimoClick = acumulador[len(acumulador)-1]
+                       #print(clickAnterior,"  ", ultimoClick)
+                           #PASAR DE TURNO
+                    if ((ultimoClick[0] >= 175) and (ultimoClick[0] <= 225) and (ultimoClick[1] <= 70) and (ultimoClick[1] >= 20)):
+                        turno+=1
+                        print ("pasar de turno")
+                        screen.blit(pasardeturno,(110,70))
+                        screen.blit(bavanzarseleccion,(175,20))
+                        random = funciondevuelveclima(turno) #random con los datos del archivo de clima (lista1)
+                        monedasturno = 0
+                        print("\n turno",turno)
+                        ultimoClick=[0,0]
+                        clickAnterior=[0,0]
+                           #print(clickAnterior,"  ", ultimoClick)
+                        for nparcela in range(cantidaddeParcelas):
+                                #print("parcela",nparcela)
+                            #apuesta
+        ##                        monedastotal, listaparcelas[nparcela]=apuesta(monedastotal,listaparcelas[nparcela],nparcela,ubicacion,cultivo)
+                    
+        ##                        monedastotal = listadeapuesta[0]
+               
+                            funcionclima=clima(random,listaparcelas[nparcela])
+                            print("lo que devuelve clima. parcela y muerte", funcionclima)
+                            print("estado parcela",listaparcelas[0])
+                            funcioncosecha=cosecha(listaparcelas[nparcela]) #LE DOY LA PARCELA
+                            print("lo que devuelve cosecha. rendimiento y muere", funcioncosecha)
+                            #reemplazo valores en la lista de cada parcela
+                            rendimientoCosecha = funcioncosecha[0] #si es cero todavia no cosecho
+                            muereCosecha = funcioncosecha[1] #si es 1 se murio, sino es cero
+                            cultivoxparcela=listaparcelas[nparcela][tipodecultivo] #voy a necesitar que cultivo hay
+                
+                            muerteporcatastrofenatural=funcionclima[1]
+                
+                            if (muereCosecha == 1) or (muerteporcatastrofenatural==1) or (rendimientoCosecha != 0):
+                                listaparcelas[nparcela]=[0,0,0,0,0]
+                                #nparcela = unirparcelaxy(ultimoClick[0],ultimoClick[1])
+                                #print("parcela número", nparcela)
+                                ubicacion = unirxyparcela(nparcela)
+                                screen.blit(parcela, ubicacion)
+                  
+                            monedasturno+=ganancia(cultivoxparcela,rendimientoCosecha) #le doy la parcela y si cosecho o murio
+                            #print("MONEDAS TURNO \n",monedasturno)
+                        monedastotal+=monedasturno
+                    else:
+                        monedasturno = 0
+                        screen.blit(normalverde,(110,70))
+                                            
+                #guardo la parcela
+               if (len(acumulador)>=2):
+                        
+                    if ((ultimoClick[0] >= 100) and (ultimoClick[0] <= 400) and (ultimoClick[1] <= 400) and (ultimoClick[1] >= 100)):
+                        screen.blit(normalverde,(110,70))
+                        screen.blit(bavanzar,(175,20))
+                        nparcela = unirparcelaxy(ultimoClick[0],ultimoClick[1])
+                            #print("parcela número", nparcela)
+                        ubicacion = unirxyparcela(nparcela)
+                            #print(ubicacion)
+                            #print("i", i)
+                        monedastotal, listaparcelas[nparcela]=apuesta(monedastotal,listaparcelas[nparcela],nparcela,ubicacion,cultivo)
+                        #listaparcelas[nparcela]=parcelita
+                        print("lo que deberia dar apuesta. monedas total, parcela",monedastotal, listaparcelas[nparcela])
+                            #print(listaparcelas[nparcela])
+            
+                        
+               monedasparaimprimir=fuente1.render(str(monedastotal),1,(0,0,0)) 
+               screen.blit(monedasparaimprimir,(540,350))
+                #print("MONEDAS TOTAL \n",monedastotal)
+           else:
+               findeljuego=fuente2.render("FIN DEL JUEGO",1,(0,0,0))
+               screen.blit(findeljuego,(350,10))
+               from topscore import topscore
+               topscore(monedastotal)
+            
         pygame.display.flip()
 
     pygame.quit()
