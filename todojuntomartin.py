@@ -392,6 +392,9 @@ def main():
             
            if event.type == QUIT: 
                 salir=True
+                
+           pasardeturno=pygame.image.load("pasardeturno.png")
+           normalverde=pygame.image.load("normalverde.png")
         
 
            if(i==0):
@@ -406,6 +409,7 @@ def main():
                if ((ultimoClick[0] >= 175) and (ultimoClick[0] <= 225) and (ultimoClick[1] <= 70) and (ultimoClick[1] >= 20)):
                    i+=1
                    print ("pasar de turno")
+                   screen.blit(pasardeturno,(110,70))
                    screen.blit(bavanzarseleccion,(175,20))
                    random = funciondevuelveclima(i) #random con los datos del archivo de clima (lista1)
                    monedasturno = 0
@@ -415,13 +419,15 @@ def main():
                    #print(clickAnterior,"  ", ultimoClick)
            else:
                    monedasturno = 0
-                   
-                        
+                   screen.blit(normalverde,(110,70))
+                                    
         #guardo la parcela
            if (len(acumulador)>=2):
                 clickAnterior = acumulador[len(acumulador)-2]
                 ultimoClick = acumulador[len(acumulador)-1]
                 if ((ultimoClick[0] >= 100) and (ultimoClick[0] <= 400) and (ultimoClick[1] <= 400) and (ultimoClick[1] >= 100)):
+                    screen.blit(normalverde,(110,70))
+                    screen.blit(bavanzar,(175,20))
                     nparcela = unirparcelaxy(ultimoClick[0],ultimoClick[1])
                     #print("parcela número", nparcela)
                     ubicacion = unirxyparcela(nparcela)
